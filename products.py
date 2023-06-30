@@ -17,10 +17,10 @@ def validate_product_init_params(name: str, price: int, quantity: int) -> None:
     if not isinstance(name, str) or name == "":
         raise ValueError(f"Invalid product name '{name}': should be a non-empty string")
 
-    if not isinstance(price, int) or price <= 0:
+    if not isinstance(price, int) or price < 0:
         raise ValueError(f"Invalid product price '{price}': should be a positive integer")
 
-    if not isinstance(quantity, int) or quantity <= 0:
+    if not isinstance(quantity, int) or quantity < 0:
         raise ValueError(f"Invalid product quantity '{quantity}': should be a positive integer")
 
 
@@ -50,8 +50,8 @@ class Product:
     def set_quantity(self, quantity: int) -> None:
         """Setter function for quantity. If quantity reaches 0, deactivates the product."""
         self.quantity = quantity
-        if self.quantity < 0:
-            self.active = False
+        if self.quantity <= 0:
+            self.deactivate()
 
     def is_active(self) -> bool:
         """Getter function for active. Returns True if the product is active, otherwise False."""
@@ -75,14 +75,32 @@ class Product:
         Updates the quantity of the product. Raises a specific exception in case of a problem.
         """
         try:
-            if self.quantity - quantity < 0:
-                raise ValueError(f"Order quantity larger than current stock: ({self.quantity})")
-            self.quantity -= quantity
+            # filter non-stocked products -> purchase always successful
             if self.quantity == 0:
-                self.deactivate()
-            print(f"You successfully purchased {quantity} units of"
-                  f" {self.name} for {self.price * quantity}$!")
-            return float(self.price * quantity)
+                print(f"You successfully purchased {quantity} units of"
+                      f" {self.name} for {self.price * quantity}$!")
+                return float(self.price * quantity)
+
+            # check stock of stocked products in store
+            elif self.quantity > 0 > self.quantity - quantity:
+                raise ValueError(f"Order quantity for {self.name} is larger than current stock: "
+                                 f"({self.quantity})")
+            else:
+                self.set_quantity(self.quantity - quantity)
+                print(f"You successfully purchased {quantity} units of"
+                      f" {self.name} for {self.price * quantity}$!")
+                return float(self.price * quantity)
         except ValueError as error:
             print(f"Error while making order! {error}")
             return 0.0
+
+
+class NonStockedProduct(Product):
+    def __init__(self, name: str, price: int):
+        super().__init__(name, price, 0)
+
+
+class LimitedProduct(Product):
+    def __init__(self, name: str, price: int, quantity: int, maximum: int):
+        super().__init__(name, price, quantity)
+        self.maximum = maximum

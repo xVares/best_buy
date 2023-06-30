@@ -1,9 +1,9 @@
-import products as products_file
-import store as store_file
+import products
+import store
 
 
-def start(store):
-    """Prints menu and returns user input"""
+def start(final_store):
+    """Displays a menu of options, receives user input, and performs corresponding actions."""
 
     while True:
         print("\n"
@@ -24,14 +24,14 @@ def start(store):
         if user_input == 1:
             bullet_point = 1
             print("--------------------------------------------")
-            for product in store.get_all_products():
+            for product in final_store.get_all_products():
                 print(f"{bullet_point}. {product.show()}")
                 bullet_point += 1
             print("--------------------------------------------")
 
         # Menu Choice 2
         if user_input == 2:
-            print(f"Total of {store.get_total_quantity()} items in store")
+            print(f"Total of {final_store.get_total_quantity()} items in store")
 
         # Menu Choice 3
         if user_input == 3:
@@ -41,7 +41,7 @@ def start(store):
 
                 # list items and append every item to order_basket
                 print("--------------------------------------------")
-                for product in store.get_all_products():
+                for product in final_store.get_all_products():
                     print(f"{bullet_point}. {product.show()}")
                     bullet_point += 1
                     order_basket.append(product)
@@ -56,7 +56,7 @@ def start(store):
                     # back to menu if user input is empty string by raising error
                     if user_product_choice == "" or user_product_quantity == "":
                         raise ValueError
-                    store.order([(order_basket_product, user_product_quantity)])
+                    final_store.order([(order_basket_product, user_product_quantity)])
                 except IndexError:
                     print("Invalid product choice! Please try again.")
                 except ValueError:
@@ -70,7 +70,8 @@ def start(store):
 
 
 def main():
-    """Starts the program and handles the main menu interactions.
+    """
+    Starts the program and handles the main menu interactions.
 
     This function initializes a list of products, creates a store instance, and presents a menu
     to the user.
@@ -93,13 +94,14 @@ def main():
         Exits the program.
 
     Note: The function relies on the `start()` function to retrieve user input.
-
     """
-    product_list = [products_file.Product("MacBook Air M2", price=1450, quantity=100),
-                    products_file.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                    products_file.Product("Google Pixel 7", price=500, quantity=250)
+    # old_main
+    product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
+                    products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+                    products.Product("Google Pixel 7", price=500, quantity=250, ),
+                    products.NonStockedProduct("Windows License", price=125)
                     ]
-    best_buy = store_file.Store(product_list)
+    best_buy = store.Store(product_list)
     start(best_buy)
 
 

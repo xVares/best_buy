@@ -28,7 +28,7 @@ class Store:
         """Returns a list of all active products in the store."""
         active_products = []
         for product in self.store_products:
-            if product.active:
+            if product.is_active():
                 active_products.append(product)
         return active_products
 
