@@ -41,7 +41,8 @@ class Store:
 
         for item in shopping_list:
             order_class = item[0]  # which product to buy
-            order_quantity = item[1]  # how many to buy
+            order_quantity = item[1]  # how many units to buy
+
             # loop over store products and subtract order quantity from stock
             for product in self.store_products:
                 if order_class.name == product.name:

@@ -1,8 +1,3 @@
-import promotions
-
-"""classes for products"""
-
-
 def validate_product_init_params(name: str, price: int, quantity: int) -> None:
     """
     validate input of Product class to have the desired type.
@@ -110,12 +105,13 @@ class Product:
             - For other products, the order quantity is deducted from the available stock.
 
         """
-        # TODO:
-        #   - Add exception for apply_promotion() method for products with no promotion
-        #       • With workaround for | self.promotion = NoneType ?
-        #   - more readable buy method ?
-        #       • shorten / simplify / add helper function
         try:
+            # apply discount if promotion exists, else calculate normal price
+            if self.promotion is None:
+                order_price = self.price * quantity
+            else:
+                order_price = self.promotion.apply_promotion(self, quantity)
+
             # check if order quantity exceeds stock in store
             if not isinstance(self, NonStockedProduct) and self.quantity - quantity < 0:
                 raise ValueError(f"Order quantity for {self.name} is larger than current stock: "
@@ -124,8 +120,8 @@ class Product:
             # filter non-stocked products -> purchase always successful
             elif isinstance(self, NonStockedProduct):
                 print(f"You successfully purchased {quantity} units of"
-                      f" {self.name} for {self.promotion.apply_promotion(self, quantity)}$!")
-                return float(self.promotion.apply_promotion(self, quantity))
+                      f" {self.name} for {order_price}$!")
+                return float(order_price)
 
             # filter limited products
             elif isinstance(self, LimitedProduct):
@@ -135,14 +131,14 @@ class Product:
                 self.set_quantity(self.quantity - quantity)
                 print(
                     f"You successfully purchased {quantity} units of {self.name} for"
-                    f" {self.promotion.apply_promotion(self, quantity)}$!")
-                return float(self.promotion.apply_promotion(self, quantity))
+                    f" {order_price}$!")
+                return float(order_price)
 
             else:
                 self.set_quantity(self.quantity - quantity)
                 print(f"You successfully purchased {quantity} units of"
-                      f" {self.name} for {self.promotion.apply_promotion(self, quantity)}$!")
-                return float(self.promotion.apply_promotion(self, quantity))
+                      f" {self.name} for {order_price}$!")
+                return float(order_price)
         except ValueError as error:
             print(f"Error while making order! {error}")
             return 0.0
