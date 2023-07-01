@@ -50,14 +50,16 @@ def start(final_store):
                 print("When you want to finish order, enter empty text.")
 
                 try:
-                    user_product_choice = int(input("Which product do you want?"))
-                    user_product_quantity = int(input("What amount do you want?"))
-                    order_basket_product = order_basket[user_product_choice - 1]
+                    product_choice = int(input("Which product do you want?"))
+                    quantity = int(input("What amount do you want?"))
+                    selected_product = order_basket[product_choice - 1]
 
                     # back to menu if user input is empty string by raising error
-                    if user_product_choice == "" or user_product_quantity == "":
+                    if selected_product == "" or quantity == "":
                         raise ValueError
-                    final_store.order([(order_basket_product, user_product_quantity)])
+                    basket_price = final_store.order([(selected_product, quantity)])
+                    print(f"You successfully purchased {quantity} units of"
+                          f" {selected_product.name} for {basket_price}$!")
                 except IndexError:
                     print("Invalid product choice! Please try again.")
                 except ValueError:

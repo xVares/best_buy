@@ -2,7 +2,6 @@ import pytest
 import products
 
 
-# TODO: improve tests
 def test_create_product():
     product = products.Product("Test Product", 10, 50)
     assert product.name == "Test Product"
