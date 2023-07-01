@@ -119,8 +119,6 @@ class Product:
 
             # filter non-stocked products -> purchase always successful
             elif isinstance(self, NonStockedProduct):
-                print(f"You successfully purchased {quantity} units of"
-                      f" {self.name} for {order_price}$!")
                 return float(order_price)
 
             # filter limited products
@@ -129,15 +127,11 @@ class Product:
                     raise ValueError(f"Order quantity for {self.name} exceeds the maximum "
                                      f"limit: ({self.maximum})")
                 self.set_quantity(self.quantity - quantity)
-                print(
-                    f"You successfully purchased {quantity} units of {self.name} for"
-                    f" {order_price}$!")
                 return float(order_price)
 
+            # filter stocked products
             else:
                 self.set_quantity(self.quantity - quantity)
-                print(f"You successfully purchased {quantity} units of"
-                      f" {self.name} for {order_price}$!")
                 return float(order_price)
         except ValueError as error:
             print(f"Error while making order! {error}")

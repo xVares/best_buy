@@ -11,6 +11,18 @@ store, make orders, and quit the program.
 - Make an order by selecting products and specifying quantities.
 - Quit the program when you're done.
 
+## Promotions
+
+The Store Management System also supports promotions for certain products. Promotions are applied to products to provide
+discounts or special offers. Here are some available promotions:
+
+- Second Half Price: Applies a 50% discount to every second instance of the same item.
+- Third One Free: Provides every third instance of the same item for free.
+- Percent Discount: Applies a percentage discount to the product price.
+
+To utilize promotions, you can create instances of the promotion classes defined in the `promotions.py` file and assign
+them to specific products in the `Product` class inside the `main.py` file.
+
 ## Usage
 
 To start the program, run `main.py` in your terminal. It will initialize a list of products, create a store instance,
